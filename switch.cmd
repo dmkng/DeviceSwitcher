@@ -1,0 +1,1 @@
+@waitfor /si TouchSwitch > NUL
