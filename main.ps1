@@ -17,7 +17,7 @@ $Notify = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifi
 while($true) {
     $Item = Get-PnpDevice -InstanceId $Id -Class 'HIDClass'
     if($Item.Status -eq 'OK') {
-	$WaitId = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor TouchSwitch).Id
+	$WaitId = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor DeviceSwitcher$PID).Id
         Set-Content .wait.pid $WaitId
         Wait-Process $WaitId
 
@@ -36,7 +36,7 @@ while($true) {
 "@)
         $Notify.Show([Windows.UI.Notifications.ToastNotification]::new($Xml))
     } elseif($Item.Status -eq 'Error') {
-	$WaitId = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor TouchSwitch).Id
+	$WaitId = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor DeviceSwitcher$PID).Id
         Set-Content .wait.pid $WaitId
         Wait-Process $WaitId
 

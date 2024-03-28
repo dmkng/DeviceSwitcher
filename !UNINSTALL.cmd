@@ -1,1 +1,1 @@
-@powershell -NoProfile -Command Start-Process schtasks -Verb runAs -WindowStyle Hidden -ArgumentList '/delete /tn TouchSwitchTask /f'
+@powershell -NoProfile -WindowStyle Hidden -Command Start-Process schtasks -Verb RunAs -WindowStyle Hidden -ArgumentList '/Delete /TN DeviceSwitcherTask /F'
