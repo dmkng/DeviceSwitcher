@@ -11,6 +11,11 @@ $Icon = 'screen'
 
 $ErrorActionPreference = 'SilentlyContinue'
 
+if(-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+	Start-Process (Join-Path $PSHome 'powershell.exe') -Verb RunAs -WindowStyle Hidden -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File ' + $MyInvocation.MyCommand.Definition)
+	exit
+}
+
 Set-Location $PSScriptRoot
 
 Set-Content .main.pid $PID
