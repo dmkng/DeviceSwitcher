@@ -3,7 +3,7 @@ Script that allows conveniently switching the specified device on or off.
 
 Originally created for ThinkPad's touch screen and to be used with ThinkPad's User Defined Function (star) key, but you can use it in any other scenario without any problems.
 
-DeviceSwitcher is designed so that you can have multiple copies with different configuration installed and running at the same time.
+DeviceSwitcher is designed so that you can have multiple copies of it with different configuration installed and running at the same time, those copies just need to be separate folders.
 
 ## How to use
 - Download latest release's source code archive [here](https://github.com/dmkng/DeviceSwitcher/releases/latest).
