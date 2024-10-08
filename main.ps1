@@ -12,6 +12,7 @@ $Icon = 'screen'
 
 $ErrorActionPreference = 'SilentlyContinue'
 
+# If not running as an admin then relaunch elevated
 if(-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
 	Start-Process (Join-Path $PSHome 'powershell.exe') -Verb RunAs -WindowStyle Hidden -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File ' + $MyInvocation.MyCommand.Definition)
 	exit
@@ -22,6 +23,7 @@ if(-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentit
 
 $Notify = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\WindowsPowerShell\v1.0\powershell.exe')
 
+# Check if the dark theme is set to determine which icons should be used, light or dark ones
 $Suffix = If((Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme).AppsUseLightTheme -eq 0) { ".png" } Else { "-dark.png" }
 
 $OffXml = New-Object Windows.Data.Xml.Dom.XmlDocument
@@ -68,11 +70,15 @@ $ErrXml.LoadXml(@"
 
 Set-Location $PSScriptRoot
 
+# Save the PID for later use by the stop.cmd helper script
 Set-Content .main.pid $PID
 
 Function SignalCheck {
 	$WaitID = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor DeviceSwitcher$PID).Id
+
+	# Save the PID for later use by the stop.cmd helper script
 	Set-Content .wait.pid $WaitID
+
 	Wait-Process $WaitID
 }
 
