@@ -28,8 +28,8 @@ $Notify = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifi
 
 $Suffix = If((Get-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize -Name AppsUseLightTheme).AppsUseLightTheme -eq 0) { ".png" } Else { "-dark.png" }
 
-$OnXml = New-Object Windows.Data.Xml.Dom.XmlDocument
-$OnXml.LoadXml(@"
+$OffXml = New-Object Windows.Data.Xml.Dom.XmlDocument
+$OffXml.LoadXml(@"
 <toast duration='short' scenario='urgent'>
 	<audio silent='true'/>
 	<visual>
@@ -42,8 +42,8 @@ $OnXml.LoadXml(@"
 </toast>
 "@)
 
-$OffXml = New-Object Windows.Data.Xml.Dom.XmlDocument
-$OffXml.LoadXml(@"
+$OnXml = New-Object Windows.Data.Xml.Dom.XmlDocument
+$OnXml.LoadXml(@"
 <toast duration='short' scenario='urgent'>
 	<audio silent='true'/>
 	<visual>
