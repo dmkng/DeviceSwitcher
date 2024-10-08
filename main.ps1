@@ -1,5 +1,5 @@
 # Device ID (can be found in Device Manager under Properties > Details > Device Instance Path)
-$Id = 'HID\VID_2386&PID_432F&COL02\6&2AE36198&0&0001' # Lenovo ThinkPad T480 Touch Screen
+$DevID = 'HID\VID_2386&PID_432F&COL02\6&2AE36198&0&0001' # Lenovo ThinkPad T480 Touch Screen
 
 # Name displayed in the notification
 $Name = 'Touch screen'
@@ -17,10 +17,6 @@ if(-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentit
 	exit
 }
 
-Set-Location $PSScriptRoot
-
-Set-Content .main.pid $PID
-
 [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] > $null
 [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
 
@@ -35,7 +31,7 @@ $OffXml.LoadXml(@"
 	<visual>
 		<binding template='ToastGeneric'>
 			<image id="1" placement='appLogoOverride' src='$PSScriptRoot\$Icon-off$Suffix'/>
-			<text id="1">$Name has been disabled.</text>
+			<text id="1">$Name is currently disabled.</text>
 			<text id="2" placement='attribution'>DeviceSwitcher</text>
 		</binding>
 	</visual>
@@ -49,7 +45,7 @@ $OnXml.LoadXml(@"
 	<visual>
 		<binding template='ToastGeneric'>
 			<image id="1" placement='appLogoOverride' src='$PSScriptRoot\$Icon-on$Suffix'/>
-			<text id="1">$Name has been enabled.</text>
+			<text id="1">$Name is currently enabled.</text>
 			<text id="2" placement='attribution'>DeviceSwitcher</text>
 		</binding>
 	</visual>
@@ -70,22 +66,26 @@ $ErrXml.LoadXml(@"
 </toast>
 "@)
 
+Set-Location $PSScriptRoot
+
+Set-Content .main.pid $PID
+
 Function SignalCheck {
-	$WaitId = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor DeviceSwitcher$PID).Id
-	Set-Content .wait.pid $WaitId
-	Wait-Process $WaitId
+	$WaitID = (Start-Process -PassThru -NoNewWindow -RedirectStandardOutput NUL waitfor DeviceSwitcher$PID).Id
+	Set-Content .wait.pid $WaitID
+	Wait-Process $WaitID
 }
 
 while($true) {
-	$Item = Get-PnpDevice $Id
+	$Item = Get-PnpDevice $DevID
 	if($Item.Status -eq 'OK') {
-		SignalCheck
-		Disable-PnpDevice $Id -Confirm:$false
-		$Notify.Show([Windows.UI.Notifications.ToastNotification]::new($OffXml))
-	} elseif($Item.Status -eq 'Error') {
-		SignalCheck
-		Enable-PnpDevice $Id -Confirm:$false
 		$Notify.Show([Windows.UI.Notifications.ToastNotification]::new($OnXml))
+		SignalCheck
+		Disable-PnpDevice $DevID -Confirm:$false
+	} elseif($Item.Status -eq 'Error') {
+		$Notify.Show([Windows.UI.Notifications.ToastNotification]::new($OffXml))
+		SignalCheck
+		Enable-PnpDevice $DevID -Confirm:$false
 	} else {
 		$Notify.Show([Windows.UI.Notifications.ToastNotification]::new($ErrXml))
 		Remove-Item .main.pid,.wait.pid -Force
