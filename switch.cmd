@@ -1,3 +1,3 @@
 @echo off
 set/p main=<"%~dp0.main.pid"
-waitfor /SI DeviceSwitcher%main% >nul
+waitfor.exe /S %computername% /SI DeviceSwitcher%main% >nul
