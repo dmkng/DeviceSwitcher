@@ -61,7 +61,7 @@ $ErrXml.LoadXml(@"
 		<binding template='ToastGeneric'>
 			<image id='1' placement='appLogoOverride' src='$PSScriptRoot\$Icon-err$Suffix'/>
 			<text id='1'>$Name can't be switched.</text>
-			<text id='2'>$val Either the device wasn't found or some error occured.</text>
+			<text id='2'>Either the device wasn't found or some error occured.</text>
 			<text id='3' placement='attribution'>DeviceSwitcher</text>
 		</binding>
 	</visual>

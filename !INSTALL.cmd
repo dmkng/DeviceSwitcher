@@ -1,5 +1,5 @@
 @echo off
-fltmc>nul 2>&1 || (
+fltmc.exe>nul 2>&1 || (
     powershell.exe -NoProfile -WindowStyle Hidden -Command Start-Process '%~dpnx0' -Verb RunAs -WindowStyle Hidden
     exit
 )
