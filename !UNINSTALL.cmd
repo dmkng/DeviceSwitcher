@@ -1,6 +1,6 @@
 @echo off
 fltmc.exe>nul 2>&1 || (
-	powershell.exe -NoProfile -WindowStyle Hidden -Command Start-Process '%~dpnx0' -Verb RunAs -WindowStyle Hidden
+	conhost.exe --headless powershell.exe -NoProfile -Command Start-Process '%~dpnx0' -Verb RunAs -WindowStyle Hidden
 	exit
 )
 

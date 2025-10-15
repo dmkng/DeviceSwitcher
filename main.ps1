@@ -14,7 +14,7 @@ $ErrorActionPreference = 'SilentlyContinue'
 
 # If not running as an admin then relaunch elevated
 if(-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-	Start-Process (Join-Path $PSHome 'powershell.exe') -Verb RunAs -WindowStyle Hidden -ArgumentList ('-NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File ' + $MyInvocation.MyCommand.Definition)
+	Start-Process (Join-Path $PSHome 'powershell.exe') -Verb RunAs -WindowStyle Hidden -ArgumentList ('-NoProfile -ExecutionPolicy Bypass -File ' + $MyInvocation.MyCommand.Definition)
 	exit
 }
 
